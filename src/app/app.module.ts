@@ -13,6 +13,8 @@ import {MenuModule} from "primeng/menu";
 import { DrawerComponent } from './drawer/drawer.component';
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
+import {CheckboxModule} from "primeng/checkbox";
+import {InputTextModule} from "primeng/inputtext";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {RippleModule} from "primeng/ripple";
     PanelMenuModule,
     MenuModule,
     ButtonModule,
-    RippleModule
+    RippleModule,
+    CheckboxModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]
