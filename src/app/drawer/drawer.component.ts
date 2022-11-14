@@ -17,10 +17,12 @@ export class DrawerComponent implements OnInit {
       {
         label: `<b>${this.itemLabels[0]}</b>`,
         routerLink: ['/login'],
+        icon: 'pi pi-sign-in'
       },
       {
         label: this.itemLabels[1],
-        routerLink: ['/settings']
+        routerLink: ['/settings'],
+        icon: 'pi pi-cog'
       }
     ]
 

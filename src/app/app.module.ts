@@ -11,6 +11,8 @@ import {PanelMenuModule} from "primeng/panelmenu";
 import { SettingsComponent } from './settings/settings.component';
 import {MenuModule} from "primeng/menu";
 import { DrawerComponent } from './drawer/drawer.component';
+import {ButtonModule} from "primeng/button";
+import {RippleModule} from "primeng/ripple";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { DrawerComponent } from './drawer/drawer.component';
     AppRoutingModule,
     MatSidenavModule,
     PanelMenuModule,
-    MenuModule
+    MenuModule,
+    ButtonModule,
+    RippleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
