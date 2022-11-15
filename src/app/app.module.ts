@@ -20,6 +20,7 @@ import {FormsModule} from "@angular/forms";
 import {DropdownModule} from "primeng/dropdown";
 import {HttpClientModule} from "@angular/common/http";
 import { LogoutComponent } from './signed-in/logout/logout.component';
+import { DomainNewComponent } from './domain-new/domain-new.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { LogoutComponent } from './signed-in/logout/logout.component';
     SettingsComponent,
     DrawerComponent,
     LogoutComponent,
+    DomainNewComponent,
   ],
   imports: [
     BrowserModule,

@@ -34,38 +34,58 @@ export class DrawerComponent implements OnInit {
       }
     ];
 
-    this.inItemsLabels = ['Domains', 'Log out'];
+    this.inItemsLabels = ['Home', 'Domains', 'Log out'];
     this.inItems = [
       {
         label: `<b>${this.inItemsLabels[0]}</b>`,
         routerLink: ['/home'],
-        icon: 'pi pi-sign-in'
+        icon: 'pi pi-home'
       },
       {
         label: this.inItemsLabels[1],
+        icon: 'pi pi-book',
+        items: [
+          {
+            label: 'Create new',
+            routerLink: ['/domains/new'],
+            icon: 'pi pi-plus'
+          }
+        ]
+      },
+      {
+        label: this.inItemsLabels[2],
         routerLink: ['/logout'],
-        icon: 'pi pi-cog'
+        icon: 'pi pi-sign-out'
       }
     ]
 
-    this.setupMenuItems()
+    this.setupMenuItems();
+
+    authService.loginSubject.subscribe((loggedIn) => {
+      this.loggedIn = loggedIn;
+    })
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
   private setupMenuItems(): void {
     const toggleBoldCommand = (items: MenuItem[], itemsLabels: string[]) => {return (event: any) => {
       for (let i = 0; i < itemsLabels.length; i++) {
-        items[i].label = itemsLabels[i];
-        event.item.label = `<b>${event.item.label}</b>`;
+        if (event.item.items === undefined) {
+          items[i].label = itemsLabels[i];
+          event.item.label = `<b>${event.item.label}</b>`;
+        }
       }
     }}
 
     this.outItems.forEach((menuItem) => {
       menuItem.escape = false;
       menuItem.command = toggleBoldCommand(this.outItems, this.outItemsLabels);
+    });
+
+    this.inItems.forEach((menuItem) => {
+      menuItem.escape = false;
+      menuItem.command = toggleBoldCommand(this.inItems, this.inItemsLabels);
     })
   }
 }
