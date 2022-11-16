@@ -64,4 +64,11 @@ export class AuthService {
     this._loginSubject.next(this._isLoggedIn);
     this.router.navigate(['/home'])
   }
+
+  public logout() {
+    console.log('Logged out!');
+    this._isLoggedIn = false;
+    this._loginSubject.next(this._isLoggedIn);
+    this.router.navigate(['/login'])
+  }
 }
