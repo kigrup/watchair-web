@@ -1,0 +1,26 @@
+<div class="surface-card shadow-4 w-full lg:w-10 p-4 m-auto mt-4 mb-4 border-round">
+  <div class="text-3xl mb-5">Application settings</div>
+  <ul class="list-none p-0 m-0">
+    <li>
+      <p-divider align="left">
+        <div>
+          <i class="pi pi-server mr-2"></i>
+          <b>Server</b>
+        </div>
+      </p-divider>
+      <ul class="list-none">
+        <li class="field w-full pt-3">
+          <label for="instanceurl" class="block">Instance URL</label>
+          <input class="w-8" id="instanceurl" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="serverInstanceUrl" />
+          <small id="instanceurl-help" class="block">Server base URL with optional port.</small>
+        </li>
+        <li class="field w-full pt-3">
+          <label for="apiversion" class="block">API Version</label>
+          <p-dropdown id="apiversion" [options]="apiVersions" [(ngModel)]="apiVersion" placeholder="" optionLabel="version" [showClear]="false"></p-dropdown>
+          <small id="apiversion-help" class="block">Preferred API version to use.</small>
+        </li>
+      </ul>
+
+    </li>
+  </ul>
+</div>

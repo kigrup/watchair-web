@@ -3,12 +3,14 @@
   height: 100%;
   max-width: 100%;
 
+
   .drawer {
-    padding: 1rem 1rem;
-    width: 15rem;
+    border-right: solid 1px var(--primary-100);
+    padding: 0 1rem;
+    width: 18rem;
   }
 
   .drawer-content {
-
+    background-color: var(--surface-ground);
   }
 }

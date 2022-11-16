@@ -1,0 +1,21 @@
+.drawer-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 8rem auto 5rem;
+  grid-column-gap: 0px;
+  grid-row-gap: 15px;
+  min-height: 100%;
+
+  .title-image {
+    max-width: 100%;
+    padding: 2rem 0;
+  }
+
+  .nav-menu {
+    max-width: 100%;
+  }
+
+  .nav-collapse {
+    padding: 0 1rem;
+  }
+}
