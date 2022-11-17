@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MenuItem} from "primeng/api";
 import {AuthService} from "../../server/auth/auth.service";
+import {DomainsService} from "../../server/domains/domains.service";
+import {Domain} from "../../server/types/domains";
 
 @Component({
   selector: 'app-drawer',
@@ -11,19 +13,24 @@ export class DrawerComponent implements OnInit {
 
   protected loggedIn: boolean = false;
 
+  protected menuVisible: boolean = true;
+
   private readonly outItemsLabels: string[];
   protected outItems: MenuItem[];
 
+  private readonly createDomainsOption: any;
   private readonly inItemsLabels: string[];
   protected inItems: MenuItem[];
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private domainService: DomainsService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.outItemsLabels = ['Login', 'Settings'];
     this.outItems = [
       {
-        label: `<b>${this.outItemsLabels[0]}</b>`,
+        label: this.outItemsLabels[0],
         routerLink: ['/login'],
         icon: 'pi pi-sign-in'
       },
@@ -34,23 +41,25 @@ export class DrawerComponent implements OnInit {
       }
     ];
 
+    this.createDomainsOption = {
+      label: 'Create new',
+      routerLink: ['/domains/new'],
+      icon: 'pi pi-plus'
+    };
     this.inItemsLabels = ['Home', 'Domains', 'Log out'];
     this.inItems = [
       {
-        label: `<b>${this.inItemsLabels[0]}</b>`,
+        label: this.inItemsLabels[0],
         routerLink: ['/home'],
         icon: 'pi pi-home'
       },
       {
         label: this.inItemsLabels[1],
-        icon: 'pi pi-book',
+        icon: 'pi pi-briefcase',
         items: [
-          {
-            label: 'Create new',
-            routerLink: ['/domains/new'],
-            icon: 'pi pi-plus'
-          }
-        ]
+          this.createDomainsOption
+        ],
+        expanded: true
       },
       {
         label: this.inItemsLabels[2],
@@ -58,15 +67,25 @@ export class DrawerComponent implements OnInit {
         icon: 'pi pi-sign-out'
       }
     ]
-
-    this.setupMenuItems();
-
-    authService.loginSubject.subscribe((loggedIn) => {
-      this.loggedIn = loggedIn;
-    })
+    //this.setupMenuItems();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.authService.loginSubject.subscribe((loggedIn: boolean) => {
+      this.loggedIn = loggedIn;
+    });
+    this.domainService.domainsFetchedSubject.subscribe((domains: Domain[]) => {
+      this.fetchedDomains(domains);
+      this.updateMenu();
+    });
+  }
+
+  async updateMenu() {
+    this.menuVisible = false;
+    setTimeout(() => {
+      this.menuVisible = true;
+    }, 0);
+  }
 
   private setupMenuItems(): void {
     const toggleBoldCommand = (items: MenuItem[], itemsLabels: string[]) => {return (event: any) => {
@@ -86,6 +105,25 @@ export class DrawerComponent implements OnInit {
     this.inItems.forEach((menuItem) => {
       menuItem.escape = false;
       menuItem.command = toggleBoldCommand(this.inItems, this.inItemsLabels);
-    })
+    });
+  }
+
+  private fetchedDomains(domains: Domain[]): void {
+    const domainsMenuOption = this.inItems.find((option) => {
+      return option.label === this.inItemsLabels[1];
+    });
+    if (domainsMenuOption === undefined) {
+      console.warn("Can't find 'Domains' menu option, can't show domains in the sidebar menu");
+      return
+    }
+    domainsMenuOption.items = [];
+    domains.forEach((domain) => {
+      domainsMenuOption.items?.push({
+        label: domain.name,
+        routerLink: [`/domains/view/${domain.id}`],
+        icon: 'pi pi-book'
+      })
+    });
+    domainsMenuOption.items?.push(this.createDomainsOption);
   }
 }

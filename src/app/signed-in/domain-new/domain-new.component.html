@@ -1,0 +1,10 @@
+<div class="surface-card shadow-4 w-full lg:w-10 p-4 m-auto mt-4 mb-4 border-round">
+  <div class="text-3xl mb-5">Create new domain</div>
+  <ul class="list-none">
+    <li class="field w-full pt-3">
+      <label for="domainName" class="block">Domain name</label>
+      <input class="w-8" id="domainName" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="newDomainName" (ngModelChange)="formChange()"/>
+    </li>
+  </ul>
+  <button pButton pRipple label="Create" icon="pi pi-save" class="w-full mt-6" (click)="createDomain()" [disabled]="!enoughDomainData" ></button>
+</div>

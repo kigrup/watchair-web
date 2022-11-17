@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../../environments/environment.prod";
 import { API_VERSIONS, APIVersion } from "../types/settings";
 import { Router } from "@angular/router";
-import {firstValueFrom, Subject} from "rxjs";
+import { firstValueFrom, Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +58,7 @@ export class AuthService {
     }
   }
 
-  public login() {
+  private login() {
     console.log('Logged in!');
     this._isLoggedIn = true;
     this._loginSubject.next(this._isLoggedIn);
