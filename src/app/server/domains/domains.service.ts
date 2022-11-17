@@ -10,6 +10,9 @@ import { HttpClient } from "@angular/common/http";
 export class DomainsService {
 
   private serverDomains: Domain[] = [];
+  public getDomain(id: string): Domain | undefined {
+    return this.serverDomains.find((domain: Domain) => { return domain.id === id});
+  }
 
   private _domainsFetchedSubject: Subject<Domain[]> = new Subject<Domain[]>();
   public get domainsFetchedSubject(): Subject<Domain[]> {
@@ -45,6 +48,19 @@ export class DomainsService {
       name: domainName
     });
     const res: Domain = await firstValueFrom(req);
+    this.fetchDomains();
+    return true;
+  }
+
+  public async deleteDomain(domainId: string): Promise<boolean> {
+    if (domainId === undefined || domainId === '') {
+      return false;
+    }
+    console.log(`DomainsService::deleteDomain: Sending delete request with id ${domainId}`);
+    const req = this.http.delete<any>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains/${domainId}`);
+    const res = await firstValueFrom(req);
+    // TODO check if result is 204 or 404 to fetch the domains again or not
+    console.log(res);
     this.fetchDomains();
     return true;
   }

@@ -22,6 +22,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { LogoutComponent } from './signed-in/logout/logout.component';
 import { DomainNewComponent } from './signed-in/domain-new/domain-new.component';
 import { DomainComponent } from './signed-in/domain/domain.component';
+import {SkeletonModule} from "primeng/skeleton";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { DomainComponent } from './signed-in/domain/domain.component';
     DividerModule,
     FormsModule,
     DropdownModule,
-    HttpClientModule
+    HttpClientModule,
+    SkeletonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

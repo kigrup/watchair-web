@@ -1,1 +1,10 @@
-<p>domain works!</p>
+<p-skeleton *ngIf="domain === undefined" styleClass="w-full lg:w-10 p-4 m-auto mt-4 mb-4 border-round h-20rem"></p-skeleton>
+<div *ngIf="domain" class="surface-card shadow-4 w-full lg:w-10 p-4 m-auto mt-4 mb-4 border-round">
+  <div class="text-3xl mb-5">{{domain.name}}</div>
+  <ul class="list-none">
+    <li class="field w-full pt-3">
+      <label class="block">Domain name</label>
+    </li>
+  </ul>
+  <!-- <button pButton pRipple label="Create" icon="pi pi-save" class="w-full mt-6" (click)="createDomain()" [disabled]="!enoughDomainData" ></button> -->
+</div>

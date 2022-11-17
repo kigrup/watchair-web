@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../server/auth/auth.service";
+import { AuthService } from "../../server/auth/auth.service";
+import { DomainsService } from "../../server/domains/domains.service";
+import { ActivatedRoute } from "@angular/router";
+import { Domain } from "../../server/types/domains";
 
 @Component({
   selector: 'app-domain',
@@ -8,13 +11,35 @@ import {AuthService} from "../../server/auth/auth.service";
 })
 export class DomainComponent implements OnInit {
 
+  protected domainId: string | null;
+  protected domain: Domain | undefined;
+
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private domainsService: DomainsService,
+    private route: ActivatedRoute
   ) {
     authService.forceLogin();
+
+    this.domainId = null;
+    route.paramMap.subscribe((params) => {
+      const newDomainId = params.get('domainId');
+      if (this.domainId !== newDomainId) {
+        this.domainId = newDomainId;
+        this.ngOnInit();
+      }
+    })
   }
 
   ngOnInit(): void {
+    this.fetchDomain();
+  }
+
+  private fetchDomain() {
+    if (this.domainId) {
+      this.domain = this.domainsService.getDomain(this.domainId);
+      console.log(`domain: ${this.domain}`);
+    }
   }
 
 }
