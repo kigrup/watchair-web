@@ -23,6 +23,8 @@ import { LogoutComponent } from './signed-in/logout/logout.component';
 import { DomainNewComponent } from './signed-in/domain-new/domain-new.component';
 import { DomainComponent } from './signed-in/domain/domain.component';
 import {SkeletonModule} from "primeng/skeleton";
+import { DocsGettingStartedComponent } from './core/docs-getting-started/docs-getting-started.component';
+import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uploading-data.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import {SkeletonModule} from "primeng/skeleton";
     LogoutComponent,
     DomainNewComponent,
     DomainComponent,
+    DocsGettingStartedComponent,
+    DocsUploadingDataComponent,
   ],
   imports: [
     BrowserModule,

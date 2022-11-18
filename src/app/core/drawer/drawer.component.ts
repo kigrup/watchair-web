@@ -15,6 +15,7 @@ export class DrawerComponent implements OnInit {
 
   protected menuVisible: boolean = true;
 
+  private readonly docsMenuOption: MenuItem;
   private readonly outItemsLabels: string[];
   protected outItems: MenuItem[];
 
@@ -25,9 +26,25 @@ export class DrawerComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private domainService: DomainsService,
-    private cdRef: ChangeDetectorRef
   ) {
-    this.outItemsLabels = ['Login', 'Settings'];
+    this.docsMenuOption = {
+      label: 'Documentation',
+      icon: 'pi pi-question-circle',
+      items: [
+        {
+          label: 'Getting started',
+          routerLink: ['/docs/getting-started'],
+          icon: 'pi pi-info-circle'
+        },
+        {
+          label: 'Uploading data',
+          routerLink: ['/docs/uploading-data'],
+          icon: 'pi pi-send'
+        }
+      ]
+    }
+
+    this.outItemsLabels = ['Login', 'Settings', 'Documentation'];
     this.outItems = [
       {
         label: this.outItemsLabels[0],
@@ -38,7 +55,8 @@ export class DrawerComponent implements OnInit {
         label: this.outItemsLabels[1],
         routerLink: ['/settings'],
         icon: 'pi pi-cog'
-      }
+      },
+      this.docsMenuOption
     ];
 
     this.createDomainsOption = {
@@ -46,7 +64,7 @@ export class DrawerComponent implements OnInit {
       routerLink: ['/domains/new'],
       icon: 'pi pi-plus'
     };
-    this.inItemsLabels = ['Home', 'Domains', 'Log out'];
+    this.inItemsLabels = ['Home', 'Domains', 'Documentation', 'Log out'];
     this.inItems = [
       {
         label: this.inItemsLabels[0],
@@ -61,8 +79,9 @@ export class DrawerComponent implements OnInit {
         ],
         expanded: true
       },
+      this.docsMenuOption,
       {
-        label: this.inItemsLabels[2],
+        label: this.inItemsLabels[3],
         routerLink: ['/logout'],
         icon: 'pi pi-sign-out'
       }
