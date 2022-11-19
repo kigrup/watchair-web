@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from "../auth/auth.service";
 import { Domain } from "../types/domains";
 import {firstValueFrom, Subject} from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +48,7 @@ export class DomainsService {
       name: domainName
     });
     const res: Domain = await firstValueFrom(req);
-    this.fetchDomains();
+    await this.fetchDomains();
     return true;
   }
 
@@ -57,11 +57,14 @@ export class DomainsService {
       return false;
     }
     console.log(`DomainsService::deleteDomain: Sending delete request with id ${domainId}`);
-    const req = this.http.delete<any>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains/${domainId}`);
-    const res = await firstValueFrom(req);
-    // TODO check if result is 204 or 404 to fetch the domains again or not
-    console.log(res);
-    this.fetchDomains();
+    const req = this.http.delete<any>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains/${domainId}`,
+      { observe: 'response' });
+    try {
+      const res = await firstValueFrom(req);
+    } catch (e) {
+      console.log(`DomainService::deleteDomain: Error caught while deleting domain. ${(e instanceof HttpErrorResponse ? `Response status ${e.status}` : '')}`)
+    }
+    await this.fetchDomains();
     return true;
   }
 }

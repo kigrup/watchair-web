@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../server/auth/auth.service";
 import { DomainsService } from "../../server/domains/domains.service";
-import { ActivatedRoute } from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { Domain } from "../../server/types/domains";
 
 @Component({
@@ -14,10 +14,12 @@ export class DomainComponent implements OnInit {
   protected domainId: string | null;
   protected domain: Domain | undefined;
 
+
   constructor(
     private authService: AuthService,
     private domainsService: DomainsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     authService.forceLogin();
 
@@ -39,6 +41,13 @@ export class DomainComponent implements OnInit {
     if (this.domainId) {
       this.domain = this.domainsService.getDomain(this.domainId);
       console.log(`domain: ${this.domain}`);
+    }
+  }
+
+  async deleteDomain() {
+    if (this.domain !== undefined) {
+      await this.domainsService.deleteDomain(this.domain.id);
+      this.router.navigate(['home']);
     }
   }
 
