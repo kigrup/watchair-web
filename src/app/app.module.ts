@@ -25,6 +25,7 @@ import { DomainComponent } from './signed-in/domain/domain.component';
 import {SkeletonModule} from "primeng/skeleton";
 import { DocsGettingStartedComponent } from './core/docs-getting-started/docs-getting-started.component';
 import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uploading-data.component';
+import {FileUploadModule} from "primeng/fileupload";
 
 @NgModule({
   declarations: [
@@ -39,23 +40,24 @@ import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uplo
     DocsGettingStartedComponent,
     DocsUploadingDataComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MatSidenavModule,
-    PanelMenuModule,
-    MenuModule,
-    ButtonModule,
-    RippleModule,
-    CheckboxModule,
-    InputTextModule,
-    DividerModule,
-    FormsModule,
-    DropdownModule,
-    HttpClientModule,
-    SkeletonModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        MatSidenavModule,
+        PanelMenuModule,
+        MenuModule,
+        ButtonModule,
+        RippleModule,
+        CheckboxModule,
+        InputTextModule,
+        DividerModule,
+        FormsModule,
+        DropdownModule,
+        HttpClientModule,
+        SkeletonModule,
+        FileUploadModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

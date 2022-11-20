@@ -11,9 +11,11 @@ import { Domain } from "../../server/types/domains";
 })
 export class DomainComponent implements OnInit {
 
-  protected domainId: string | null;
+  protected domainId: string | undefined;
   protected domain: Domain | undefined;
 
+  protected filesUrl: string | undefined;
+  protected uploadedFiles: any[] = [];
 
   constructor(
     private authService: AuthService,
@@ -23,11 +25,11 @@ export class DomainComponent implements OnInit {
   ) {
     authService.forceLogin();
 
-    this.domainId = null;
     route.paramMap.subscribe((params) => {
       const newDomainId = params.get('domainId');
-      if (this.domainId !== newDomainId) {
+      if (newDomainId !== null && this.domainId !== newDomainId) {
         this.domainId = newDomainId;
+        this.filesUrl = this.domainsService.getDomainFilesUrl(this.domainId);
         this.ngOnInit();
       }
     })

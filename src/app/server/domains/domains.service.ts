@@ -67,4 +67,8 @@ export class DomainsService {
     await this.fetchDomains();
     return true;
   }
+
+  public getDomainFilesUrl(domainId: string) {
+    return `http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains/${domainId}/files`;
+  }
 }
