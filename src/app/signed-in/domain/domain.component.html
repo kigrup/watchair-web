@@ -1,7 +1,7 @@
-<div class="grid w-full py-2">
-  <div class="col-12 lg:col-6 p-4">
+<div class="grid w-full py-2 px-2 m-0">
+  <div class="col-12 lg:col-6 p-2">
     <p-skeleton *ngIf="domain === undefined" styleClass="w-full p-4 border-round h-20rem"></p-skeleton>
-    <div *ngIf="domain" class="surface-card shadow-4 w-full p-4 border-round">
+    <div *ngIf="domain" class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
       <div class="text-3xl mb-5">{{domain.name}}</div>
       <ul class="list-none p-0">
         <li class="flex align-items-center py-3 border-top-1 surface-border flex-wrap">
@@ -26,10 +26,12 @@
       </ul>
     </div>
   </div>
-  <div class="col-12 lg:col-6 p-4">
-    <div class="surface-card shadow-4 w-full p-4 border-round">
-      <div class="text-3xl mb-5">Upload files</div>
-      <p-fileUpload name="file" url="{{filesUrl}}" accept=".xlsx,.xls">
+  <div class="col-12 lg:col-6 p-2">
+    <p-skeleton *ngIf="domain === undefined" styleClass="w-full p-4 border-round h-20rem"></p-skeleton>
+    <div *ngIf="domain" class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
+      <div class="text-3xl mb-5">Domain data</div>
+      <div>Upload conference data in <span class="bg-green-600 text-white border-round px-1">.XLS</span> or <span class="bg-green-600 text-white border-round px-1">.XLSX</span> format for the system to analyze and generate metrics<br><br></div>
+      <p-fileUpload name="file" url="{{filesUrl}}" accept=".xlsx,.xls" (onUpload)="onUpload($event)">
         <ul *ngIf="uploadedFiles">
           <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
         </ul>

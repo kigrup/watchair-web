@@ -3,6 +3,7 @@ import { AuthService } from "../../server/auth/auth.service";
 import { DomainsService } from "../../server/domains/domains.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import { Domain } from "../../server/types/domains";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-domain',
@@ -50,6 +51,13 @@ export class DomainComponent implements OnInit {
     if (this.domain !== undefined) {
       await this.domainsService.deleteDomain(this.domain.id);
       this.router.navigate(['home']);
+    }
+  }
+
+  protected onUpload(event: any) {
+    const response: HttpResponse<any> = event.originalEvent;
+    if (response.body.job !== undefined) {
+
     }
   }
 
