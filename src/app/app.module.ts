@@ -26,6 +26,7 @@ import {SkeletonModule} from "primeng/skeleton";
 import { DocsGettingStartedComponent } from './core/docs-getting-started/docs-getting-started.component';
 import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uploading-data.component';
 import {FileUploadModule} from "primeng/fileupload";
+import {TableModule} from "primeng/table";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {FileUploadModule} from "primeng/fileupload";
         DropdownModule,
         HttpClientModule,
         SkeletonModule,
-        FileUploadModule
+        FileUploadModule,
+        TableModule
     ],
   providers: [],
   bootstrap: [AppComponent]

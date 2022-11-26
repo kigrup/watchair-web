@@ -10,7 +10,7 @@ import { HttpClient } from "@angular/common/http";
 export class JobsService {
 
   private serverJobs: Job[] = [];
-  public getDomainJobs(domainId: string): Job[] | undefined {
+  public getDomainJobs(domainId: string): Job[] {
     return this.serverJobs.filter((job: Job) => { return job.domainId === domainId});
   }
 

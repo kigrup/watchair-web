@@ -4,6 +4,9 @@ import { DomainsService } from "../../server/domains/domains.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import { Domain } from "../../server/types/domains";
 import {HttpResponse} from "@angular/common/http";
+import {Job} from "../../server/types/jobs";
+import {JobsService} from "../../server/jobs/jobs.service";
+import {format} from "date-fns"
 
 @Component({
   selector: 'app-domain',
@@ -14,6 +17,7 @@ export class DomainComponent implements OnInit {
 
   protected domainId: string | undefined;
   protected domain: Domain | undefined;
+  protected jobs: Job[] = [];
 
   protected filesUrl: string | undefined;
   protected uploadedFiles: any[] = [];
@@ -21,6 +25,7 @@ export class DomainComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private domainsService: DomainsService,
+    private jobsService: JobsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -38,12 +43,19 @@ export class DomainComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDomain();
+    this.fetchJobs();
   }
 
   private fetchDomain() {
     if (this.domainId) {
       this.domain = this.domainsService.getDomain(this.domainId);
       console.log(`domain: ${this.domain}`);
+    }
+  }
+
+  private fetchJobs() {
+    if (this.domainId) {
+      this.jobs = this.jobsService.getDomainJobs(this.domainId);
     }
   }
 
@@ -57,7 +69,7 @@ export class DomainComponent implements OnInit {
   protected onUpload(event: any) {
     const response: HttpResponse<any> = event.originalEvent;
     if (response.body.job !== undefined) {
-
+      this.jobs.unshift(response.body.job);
     }
   }
 
