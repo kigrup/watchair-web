@@ -7,6 +7,7 @@ import {HttpResponse} from "@angular/common/http";
 import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {format} from "date-fns"
+import {UnitMetric} from "../../server/types/metrics";
 
 @Component({
   selector: 'app-domain',
@@ -18,6 +19,7 @@ export class DomainComponent implements OnInit {
   protected domainId: string | undefined;
   protected domain: Domain | undefined;
   protected jobs: Job[] = [];
+  protected reviewsDoneMetric: UnitMetric | undefined;
 
   protected filesUrl: string | undefined;
   protected uploadedFiles: any[] = [];
@@ -43,7 +45,7 @@ export class DomainComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDomain();
-    this.fetchJobs();
+    this.fetchJobs(false);
   }
 
   private fetchDomain() {
@@ -53,8 +55,12 @@ export class DomainComponent implements OnInit {
     }
   }
 
-  private fetchJobs() {
+  protected async fetchJobs(forceRequest: boolean) {
     if (this.domainId) {
+      console.log(`DomainComponent::fetchJobs: Fetching jobs for domain id ${this.domainId}. Use cache? (don't request jobs again): ${!forceRequest}`);
+      if (forceRequest) {
+        await this.jobsService.fetchJobs(this.domainId);
+      }
       this.jobs = this.jobsService.getDomainJobs(this.domainId);
     }
   }

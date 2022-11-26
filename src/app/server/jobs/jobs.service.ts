@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {firstValueFrom, Subject} from "rxjs";
 import { Job } from "../types/jobs";
-import { AuthService } from "../auth/auth.service";
 import { HttpClient } from "@angular/common/http";
+import { DomainsService } from "../domains/domains.service";
+import { Domain } from "../types/domains";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,21 +23,25 @@ export class JobsService {
 
   constructor(
     private authService: AuthService,
+    private domainsService: DomainsService,
     private http: HttpClient
   ) {
-    authService.loginSubject.subscribe((loggedIn) => {
-      if (loggedIn) {
-        this.fetchJobs();
+    domainsService.domainsFetchedSubject.subscribe(async (domains: Domain[]) => {
+      for (let i = 0; i < domains.length; i++) {
+        await this.fetchJobs(domains[i].id)
       }
-    });
+    })
   }
 
-  private async fetchJobs(): Promise<void> {
+  public async fetchJobs(domainId: string): Promise<void> {
     console.log(`JobsService::fetchJobs: Fetching jobs`);
-    const req = this.http.get<Job[]>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/jobs`);
+    const req = this.http.get<Job[]>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains/${domainId}/jobs`);
     const res: Job[] = await firstValueFrom(req);
     console.log(`JobsService::fetchJobs: Fetched ${res.length} jobs. Job ids: ${res.map((job: Job) => { return `"${job.id}"` })}`);
-    this.serverJobs = res;
+    this.serverJobs = this.serverJobs.filter((job: Job) => {
+      return (job.domainId !== domainId)
+    }).concat(res);
+
     this.jobsFetchedSubject.next(this.serverJobs);
   }
 }

@@ -1,3 +1,7 @@
+export type Metrics = {
+  unitMetrics: UnitMetric[]
+}
+
 export type UnitMetric = {
   id: string
   title: string
