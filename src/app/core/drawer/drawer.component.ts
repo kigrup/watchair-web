@@ -3,6 +3,8 @@ import {MenuItem} from "primeng/api";
 import {AuthService} from "../../server/auth/auth.service";
 import {DomainsService} from "../../server/domains/domains.service";
 import {Domain} from "../../server/types/domains";
+import {JobsService} from "../../server/jobs/jobs.service";
+import {MetricsService} from "../../server/metrics/metrics.service";
 
 @Component({
   selector: 'app-drawer',
@@ -26,6 +28,8 @@ export class DrawerComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private domainService: DomainsService,
+    private jobsService: JobsService,
+    private metricsService: MetricsService
   ) {
     this.docsMenuOption = {
       label: 'Documentation',

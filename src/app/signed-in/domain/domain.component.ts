@@ -8,6 +8,7 @@ import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {format} from "date-fns"
 import {UnitMetric} from "../../server/types/metrics";
+import {MetricsService} from "../../server/metrics/metrics.service";
 
 @Component({
   selector: 'app-domain',
@@ -28,6 +29,7 @@ export class DomainComponent implements OnInit {
     private authService: AuthService,
     private domainsService: DomainsService,
     private jobsService: JobsService,
+    private metricsService: MetricsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -46,6 +48,7 @@ export class DomainComponent implements OnInit {
   ngOnInit(): void {
     this.fetchDomain();
     this.fetchJobs(false);
+    this.fetchMetrics(false);
   }
 
   private fetchDomain() {
@@ -79,4 +82,15 @@ export class DomainComponent implements OnInit {
     }
   }
 
+  protected async fetchMetrics(forceRequest: boolean) {
+    if (this.domainId) {
+      console.log(`DomainComponent::fetchMetrics: Fetching metrics for domain id ${this.domainId}. Use cache? (don't request jobs again): ${!forceRequest}`);
+      if (forceRequest) {
+        await this.metricsService.fetchMetrics(this.domainId);
+      }
+      this.reviewsDoneMetric = this.metricsService.getDomainMetrics(this.domainId).unitMetrics.find((unitMetric: UnitMetric) => {
+        return unitMetric.title === 'Review assignments finished'
+      });
+    }
+  }
 }

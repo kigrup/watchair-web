@@ -1,4 +1,9 @@
 <div class="grid w-full py-2 px-2 m-0">
+  <div *ngIf="reviewsDoneMetric" class="col-12 lg:col-6 p-2">
+    <div class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
+      <div class="text-3xl mb-5">{{reviewsDoneMetric.title}}</div>
+    </div>
+  </div>
   <div class="col-12 lg:col-6 p-2">
     <p-skeleton *ngIf="domain === undefined" styleClass="w-full p-4 border-round h-20rem shadow-4"></p-skeleton>
     <div *ngIf="domain" class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
@@ -65,12 +70,6 @@
           </tr>
         </ng-template>
       </p-table>
-    </div>
-  </div>
-  <div class="col-12 lg:col-6 p-2">
-    <p-skeleton *ngIf="reviewsDoneMetric === undefined" styleClass="w-full p-4 border-round h-20rem shadow-4"></p-skeleton>
-    <div *ngIf="reviewsDoneMetric" class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
-      <div class="text-3xl mb-5">{{reviewsDoneMetric.title}}</div>
     </div>
   </div>
 </div>

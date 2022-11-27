@@ -26,6 +26,7 @@ export class JobsService {
     private domainsService: DomainsService,
     private http: HttpClient
   ) {
+    console.log('Jobs Service constructed');
     domainsService.domainsFetchedSubject.subscribe(async (domains: Domain[]) => {
       for (let i = 0; i < domains.length; i++) {
         await this.fetchJobs(domains[i].id)

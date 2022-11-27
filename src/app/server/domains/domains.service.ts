@@ -3,6 +3,8 @@ import { AuthService } from "../auth/auth.service";
 import { Domain } from "../types/domains";
 import {firstValueFrom, Subject} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {JobsService} from "../jobs/jobs.service";
+import {MetricsService} from "../metrics/metrics.service";
 
 @Injectable({
   providedIn: 'root'
