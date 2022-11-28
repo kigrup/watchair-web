@@ -7,7 +7,7 @@ import {HttpResponse} from "@angular/common/http";
 import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {format} from "date-fns"
-import {UnitMetric} from "../../server/types/metrics";
+import {Metric} from "../../server/types/metrics";
 import {MetricsService} from "../../server/metrics/metrics.service";
 
 @Component({
@@ -20,7 +20,7 @@ export class DomainComponent implements OnInit {
   protected domainId: string | undefined;
   protected domain: Domain | undefined;
   protected jobs: Job[] = [];
-  protected reviewsDoneMetric: UnitMetric | undefined;
+  protected reviewsDoneMetric: Metric | undefined;
 
   protected filesUrl: string | undefined;
   protected uploadedFiles: any[] = [];
@@ -88,8 +88,8 @@ export class DomainComponent implements OnInit {
       if (forceRequest) {
         await this.metricsService.fetchMetrics(this.domainId);
       }
-      this.reviewsDoneMetric = this.metricsService.getDomainMetrics(this.domainId).unitMetrics.find((unitMetric: UnitMetric) => {
-        return unitMetric.title === 'Review assignments finished'
+      this.reviewsDoneMetric = this.metricsService.getDomainMetrics(this.domainId).find((metric: Metric) => {
+        return metric.title === 'Review assignments finished'
       });
     }
   }

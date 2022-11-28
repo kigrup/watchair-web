@@ -1,16 +1,19 @@
-export type Metrics = {
-  unitMetrics: UnitMetric[]
+export type MetricValue = {
+  id: string
+  headerId: string
+  value: number
+  label: string
+  color: `#${string}`
 }
 
-export type UnitMetric = {
+export type Metric = {
   id: string
   title: string
   description: string
-  value: number
-  minValue: number
-  maxValue: number
-  step: number
-  createdAt: Date
-  updatedAt: Date
+  valueMin: number
+  valueMax: number
+  valueStep: number
+  valueUnit: string
   domainId: string
+  values: MetricValue[]
 }

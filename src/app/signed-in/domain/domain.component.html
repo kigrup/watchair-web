@@ -4,8 +4,8 @@
       <div class="text-3xl mb-4">{{reviewsDoneMetric.title}}</div>
       <circle-progress
           [class]="'w-full m-auto'"
-          [percent]="100 * reviewsDoneMetric.value / reviewsDoneMetric.maxValue"
-          [subtitle]="reviewsDoneMetric.value + ' / ' + reviewsDoneMetric.maxValue + ' reviews done'"
+          [percent]="100 * reviewsDoneMetric.values[0].value / reviewsDoneMetric.valueMax"
+          [subtitle]="reviewsDoneMetric.values[0].value + ' / ' + reviewsDoneMetric.valueMax + ' reviews done'"
       ></circle-progress>
       <div class="mt-2">{{reviewsDoneMetric.description}}</div>
     </div>
