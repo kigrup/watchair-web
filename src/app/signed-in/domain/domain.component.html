@@ -1,9 +1,17 @@
 <div class="grid w-full py-2 px-2 m-0">
   <div *ngIf="reviewsDoneMetric" class="col-12 lg:col-6 p-2">
     <div class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
-      <div class="text-3xl mb-5">{{reviewsDoneMetric.title}}</div>
+      <div class="text-3xl mb-4">{{reviewsDoneMetric.title}}</div>
+      <circle-progress
+          [class]="'w-full m-auto'"
+          [percent]="100 * reviewsDoneMetric.value / reviewsDoneMetric.maxValue"
+          [subtitle]="reviewsDoneMetric.value + ' / ' + reviewsDoneMetric.maxValue + ' reviews done'"
+      ></circle-progress>
+      <div class="mt-2">{{reviewsDoneMetric.description}}</div>
     </div>
   </div>
+</div>
+<div class="grid w-full py-2 px-2 m-0">
   <div class="col-12 lg:col-6 p-2">
     <p-skeleton *ngIf="domain === undefined" styleClass="w-full p-4 border-round h-20rem shadow-4"></p-skeleton>
     <div *ngIf="domain" class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">

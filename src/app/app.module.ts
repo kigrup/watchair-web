@@ -27,6 +27,7 @@ import { DocsGettingStartedComponent } from './core/docs-getting-started/docs-ge
 import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uploading-data.component';
 import {FileUploadModule} from "primeng/fileupload";
 import {TableModule} from "primeng/table";
+import {NgCircleProgressModule} from "ng-circle-progress";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,21 @@ import {TableModule} from "primeng/table";
         HttpClientModule,
         SkeletonModule,
         FileUploadModule,
-        TableModule
+        TableModule,
+        NgCircleProgressModule.forRoot({
+          renderOnClick: false,
+          radius: 110,
+          outerStrokeColor: '#2196F3',
+          outerStrokeGradientStopColor: '#6ab8f7',
+          outerStrokeWidth: 20,
+          outerStrokeGradient: true,
+          innerStrokeColor: '#E7E8EA',
+          innerStrokeWidth: 28,
+          space: -24,
+          titleFontSize: '35',
+          unitsFontSize: '25',
+          subtitleFontSize: '18'
+        })
     ],
   providers: [],
   bootstrap: [AppComponent]
