@@ -7,7 +7,7 @@ import {HttpResponse} from "@angular/common/http";
 import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {format} from "date-fns"
-import {Metric} from "../../server/types/metrics";
+import {Metric, MetricValue} from "../../server/types/metrics";
 import {MetricsService} from "../../server/metrics/metrics.service";
 
 @Component({
@@ -21,6 +21,13 @@ export class DomainComponent implements OnInit {
   protected domain: Domain | undefined;
   protected jobs: Job[] = [];
   protected reviewsDoneMetric: Metric | undefined;
+  protected submissionsAcceptanceMetric: Metric | undefined;
+  protected submissionsAcceptanceData: any;
+
+  protected primeNgChartOptions: any = {
+    responsive: false,
+    maintainsAspectRatio: false
+  }
 
   protected filesUrl: string | undefined;
   protected uploadedFiles: any[] = [];
@@ -91,6 +98,29 @@ export class DomainComponent implements OnInit {
       this.reviewsDoneMetric = this.metricsService.getDomainMetrics(this.domainId).find((metric: Metric) => {
         return metric.title === 'Review assignments finished'
       });
+      this.submissionsAcceptanceMetric = this.metricsService.getDomainMetrics(this.domainId).find((metric: Metric) => {
+        return metric.title === 'Submissions evaluation scores'
+      })
+      this.updateMetricsData();
     }
+  }
+
+  private updateMetricsData() {
+    const sortStrNum = (a: MetricValue, b: MetricValue): -1 | 0 | 1 => {
+      return (a.label.charAt(0) === '-' && b.label.charAt(0) === '-') ? (a.label < b.label ? -1 : 1) : (a.label < b.label ? 1 : -1)
+    }
+
+    const sortedValues: MetricValue[] | undefined = this.submissionsAcceptanceMetric?.values.sort(sortStrNum);
+    if (this.submissionsAcceptanceMetric !== undefined && sortedValues !== undefined) {
+      this.submissionsAcceptanceMetric.values = sortedValues;
+    }
+    console.log(sortedValues);
+    this.submissionsAcceptanceData = {
+      labels: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.label }),
+      datasets: [{
+        data: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.value }),
+        backgroundColor: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.color })
+      }]
+    };
   }
 }
