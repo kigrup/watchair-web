@@ -13,7 +13,7 @@ import {MetricsService} from "../../server/metrics/metrics.service";
 })
 export class DrawerComponent implements OnInit {
 
-  protected loggedIn: boolean = false;
+  protected loggedIn: boolean;
 
   protected menuVisible: boolean = true;
 
@@ -90,6 +90,7 @@ export class DrawerComponent implements OnInit {
         icon: 'pi pi-sign-out'
       }
     ]
+    this.loggedIn = authService.loggedUsername !== null ? true : false;
     //this.setupMenuItems();
   }
 

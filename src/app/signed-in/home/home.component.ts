@@ -8,13 +8,22 @@ import {AuthService} from "../../server/auth/auth.service";
 })
 export class HomeComponent implements OnInit {
 
+  protected username: string | undefined;
+
   constructor(
     private authService: AuthService
   ) {
     this.authService.forceLogin();
+    authService.loginSubject.subscribe((loggedIn: boolean) => {
+      this.username = authService.loggedUsername ?? undefined;
+    })
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if (this.username === undefined) {
+      this.username = this.authService.loggedUsername ?? undefined
+    }
+  }
 
 
 }
