@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../../environments/environment.prod";
 import { API_VERSIONS, APIVersion } from "../types/settings";
 import { Router } from "@angular/router";
-import {firstValueFrom, Subject} from "rxjs";
+import { firstValueFrom, Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private LOGGED_USERNAME_COOKIE: string = 'logged-username';
 
   private _isLoggedIn: boolean;
   public get isLoggedIn(): boolean {
@@ -30,6 +32,11 @@ export class AuthService {
     return this._loginSubject;
   }
 
+  private _loggedUsername: string | null;
+  public get loggedUsername(): string | null {
+    return this._loggedUsername;
+  }
+
   constructor(
     private http: HttpClient,
     private router: Router
@@ -37,6 +44,17 @@ export class AuthService {
     this._isLoggedIn = false;
     this._instanceURL = environment.serverInstance;
     this._preferredAPI = API_VERSIONS[0];
+    this._loggedUsername = ''
+    this.checkLoginStorage();
+  }
+
+  private checkLoginStorage() {
+    const cookieUsername = localStorage.getItem(this.LOGGED_USERNAME_COOKIE);
+    if (cookieUsername) {
+      console.log(`authService::checkLoginStorage: Found a logged in user: ${cookieUsername}`)
+      this.login(cookieUsername)
+      console.log(`now loggeds in user is: ${this._loggedUsername}`)
+    }
   }
 
   public forceLogin() {
@@ -50,7 +68,7 @@ export class AuthService {
     const req = this.http.get<any>(`http://${this._instanceURL}/api/ping`);
     const res: any = await firstValueFrom(req)
     if (res.pong) {
-      this.login();
+      this.login(username);
       return true;
     } else {
       console.log('Login failed');
@@ -58,8 +76,10 @@ export class AuthService {
     }
   }
 
-  public login() {
+  private login(username: string) {
     console.log('Logged in!');
+    localStorage.setItem(this.LOGGED_USERNAME_COOKIE, username);
+    this._loggedUsername = username;
     this._isLoggedIn = true;
     this._loginSubject.next(this._isLoggedIn);
     this.router.navigate(['/home'])
@@ -67,6 +87,8 @@ export class AuthService {
 
   public logout() {
     console.log('Logged out!');
+    localStorage.removeItem(this.LOGGED_USERNAME_COOKIE)
+    this._loggedUsername = null;
     this._isLoggedIn = false;
     this._loginSubject.next(this._isLoggedIn);
     this.router.navigate(['/login'])

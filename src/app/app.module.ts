@@ -20,7 +20,15 @@ import {FormsModule} from "@angular/forms";
 import {DropdownModule} from "primeng/dropdown";
 import {HttpClientModule} from "@angular/common/http";
 import { LogoutComponent } from './signed-in/logout/logout.component';
-import { DomainNewComponent } from './domain-new/domain-new.component';
+import { DomainNewComponent } from './signed-in/domain-new/domain-new.component';
+import { DomainComponent } from './signed-in/domain/domain.component';
+import {SkeletonModule} from "primeng/skeleton";
+import { DocsGettingStartedComponent } from './core/docs-getting-started/docs-getting-started.component';
+import { DocsUploadingDataComponent } from './core/docs-uploading-data/docs-uploading-data.component';
+import {FileUploadModule} from "primeng/fileupload";
+import {TableModule} from "primeng/table";
+import {NgCircleProgressModule} from "ng-circle-progress";
+import {ChartModule} from "primeng/chart";
 
 @NgModule({
   declarations: [
@@ -31,6 +39,9 @@ import { DomainNewComponent } from './domain-new/domain-new.component';
     DrawerComponent,
     LogoutComponent,
     DomainNewComponent,
+    DomainComponent,
+    DocsGettingStartedComponent,
+    DocsUploadingDataComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,25 @@ import { DomainNewComponent } from './domain-new/domain-new.component';
     DividerModule,
     FormsModule,
     DropdownModule,
-    HttpClientModule
+    HttpClientModule,
+    SkeletonModule,
+    FileUploadModule,
+    TableModule,
+    NgCircleProgressModule.forRoot({
+      renderOnClick: false,
+      radius: 110,
+      outerStrokeColor: '#2196F3',
+      outerStrokeGradientStopColor: '#6ab8f7',
+      outerStrokeWidth: 20,
+      outerStrokeGradient: true,
+      innerStrokeColor: '#E7E8EA',
+      innerStrokeWidth: 28,
+      space: -24,
+      titleFontSize: '35',
+      unitsFontSize: '25',
+      subtitleFontSize: '18'
+    }),
+    ChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]
