@@ -1,9 +1,9 @@
 <div class="drawer-main">
   <img src="../../../assets/logo-long.png" class="title-image">
   <div class="nav-menu">
-    <p-panelMenu [transitionOptions]="'0ms'" [model]="loggedIn ? inItems : outItems"></p-panelMenu>
+    <p-panelMenu *ngIf="menuVisible" [transitionOptions]="'200ms'" [model]="loggedIn ? inItems : outItems"></p-panelMenu>
   </div>
-  <div class="nav-collapse">
+  <!-- <div class="nav-collapse">
     <button pButton pRipple type="button" icon="pi pi-angle-left" class="p-button-outlined"></button>
-  </div>
+  </div> -->
 </div>
