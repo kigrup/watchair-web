@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  serverInstance: 'localhost:42525'
 };
