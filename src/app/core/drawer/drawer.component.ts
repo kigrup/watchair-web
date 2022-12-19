@@ -68,7 +68,7 @@ export class DrawerComponent implements OnInit {
       routerLink: ['/domains/new'],
       icon: 'pi pi-plus'
     };
-    this.inItemsLabels = ['Home', 'Domains', 'Documentation', 'Log out'];
+    this.inItemsLabels = ['Home', 'Domains', 'Documentation', 'Settings', 'Log out'];
     this.inItems = [
       {
         label: this.inItemsLabels[0],
@@ -86,11 +86,17 @@ export class DrawerComponent implements OnInit {
       this.docsMenuOption,
       {
         label: this.inItemsLabels[3],
+        routerLink: ['/settings'],
+        icon: 'pi pi-cog'
+      },
+      {
+        label: this.inItemsLabels[4],
         routerLink: ['/logout'],
         icon: 'pi pi-sign-out'
       }
     ]
-    this.loggedIn = authService.loggedUsername !== null ? true : false;
+    this.loggedIn = authService.loggedUsername !== null && authService.loggedUsername !== undefined ? true : false;
+
     //this.setupMenuItems();
   }
 
@@ -99,6 +105,7 @@ export class DrawerComponent implements OnInit {
       this.loggedIn = loggedIn;
     });
     this.domainService.domainsFetchedSubject.subscribe((domains: Domain[]) => {
+      console.log(`drawerComponent::ngOnInit: domainsFetchedSubject event. Updating menu with options...`)
       this.fetchedDomains(domains);
       this.updateMenu();
     });

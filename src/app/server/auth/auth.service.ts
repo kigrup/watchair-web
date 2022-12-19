@@ -44,7 +44,7 @@ export class AuthService {
     this._isLoggedIn = false;
     this._instanceURL = environment.serverInstance;
     this._preferredAPI = API_VERSIONS[0];
-    this._loggedUsername = ''
+    this._loggedUsername = null;
     this.checkLoginStorage();
   }
 
@@ -59,6 +59,7 @@ export class AuthService {
 
   public forceLogin() {
     if (!this._isLoggedIn) {
+      console.log(`authService::forceLogin: Tried to load a page that requires user to be logged in. Redirecting to home...`);
       this.router.navigate(['/login']);
     }
   }
@@ -82,7 +83,9 @@ export class AuthService {
     this._loggedUsername = username;
     this._isLoggedIn = true;
     this._loginSubject.next(this._isLoggedIn);
-    this.router.navigate(['/home'])
+    if (this.router.url.includes('/login')) {
+      this.router.navigate(['/home'])
+    }
   }
 
   public logout() {
