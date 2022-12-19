@@ -8,16 +8,22 @@
           <b>Server</b>
         </div>
       </p-divider>
+      <p class="mt-5">Some settings are only available when being connected to a server and others while not</p>
       <ul class="list-none">
         <li class="field w-full pt-3">
           <label for="instanceurl" class="block">Instance URL</label>
-          <input class="w-8" id="instanceurl" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="serverInstanceUrl" />
+          <input id="instanceurl" [disabled]="this.authService.isLoggedIn" class="w-8" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="serverInstanceUrl" />
           <small id="instanceurl-help" class="block">Server base URL with optional port.</small>
         </li>
         <li class="field w-full pt-3">
           <label for="apiversion" class="block">API Version</label>
-          <p-dropdown id="apiversion" [options]="apiVersions" [(ngModel)]="apiVersion" placeholder="" optionLabel="version" [showClear]="false"></p-dropdown>
+          <p-dropdown id="apiversion" [disabled]="this.authService.isLoggedIn"  [options]="apiVersions" [(ngModel)]="apiVersion" placeholder="" optionLabel="version" [showClear]="false"></p-dropdown>
           <small id="apiversion-help" class="block">Preferred API version to use.</small>
+        </li>
+        <li class="mt-6">
+          <label for="resetdb" class="block">Delete data</label>
+          <button id="resetdb" [disabled]="!this.authService.isLoggedIn" pButton pRipple label="Reset database" icon="pi pi-trash" class="w-4 flex-order-1 p-button-outlined p-button-danger mt-2 mb-2" (click)="resetDatabase()" ></button>
+          <small id="resetdb-help" class="block">Delete all server data. <b class="text-red-600">Irreversible!</b></small>
         </li>
       </ul>
     </li>

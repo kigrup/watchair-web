@@ -6,7 +6,6 @@ import { Domain } from "../../server/types/domains";
 import {HttpResponse} from "@angular/common/http";
 import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
-import {format} from "date-fns"
 import {Metric, MetricValue} from "../../server/types/metrics";
 import {MetricsService} from "../../server/metrics/metrics.service";
 
@@ -15,7 +14,7 @@ import {MetricsService} from "../../server/metrics/metrics.service";
   templateUrl: './domain.component.html',
   styleUrls: ['./domain.component.scss']
 })
-export class DomainComponent implements OnInit {
+export class DomainComponent {
 
   protected domainId: string | undefined;
   protected domain: Domain | undefined;
@@ -44,24 +43,38 @@ export class DomainComponent implements OnInit {
 
     route.paramMap.subscribe((params) => {
       const newDomainId = params.get('domainId');
+      console.log(`DomainComponent::constructor: retrieved domaindId: ${newDomainId} from params`)
       if (newDomainId !== null && this.domainId !== newDomainId) {
         this.domainId = newDomainId;
+        console.log('DomainComponent::constructor: assigned domainId');
         this.filesUrl = this.domainsService.getDomainFilesUrl(this.domainId);
-        this.ngOnInit();
+        void this.initializeDomain();
       }
+    })
+    this.domainsService.domainsFetchedSubject.subscribe((value) => {
+      this.initializeDomain();
+    })
+    this.jobsService.jobsFetchedSubject.subscribe((value) => {
+      this.initializeDomain();
+    })
+    this.metricsService.metricsFetchedSubject.subscribe((value) => {
+      this.initializeDomain();
     })
   }
 
-  ngOnInit(): void {
-    this.fetchDomain();
-    this.fetchJobs(false);
-    this.fetchMetrics(false);
+  async initializeDomain(): Promise<void> {
+    console.log(`DomainComponent::ngOnInit: Initializing domain. DomainId=${this.domainId}`);
+    await this.fetchDomain();
+    await this.fetchJobs(false);
+    await this.fetchMetrics(false);
   }
 
   private fetchDomain() {
     if (this.domainId) {
       this.domain = this.domainsService.getDomain(this.domainId);
-      console.log(`domain: ${this.domain}`);
+      if (this.domain === undefined) {
+        console.warn(`DomainComponent::fetchDomain: Domain with id ${this.domainId} not found in domain service!`)
+      }
     }
   }
 
@@ -78,7 +91,7 @@ export class DomainComponent implements OnInit {
   async deleteDomain() {
     if (this.domain !== undefined) {
       await this.domainsService.deleteDomain(this.domain.id);
-      this.router.navigate(['home']);
+      await this.router.navigate(['home']);
     }
   }
 
@@ -114,7 +127,6 @@ export class DomainComponent implements OnInit {
     if (this.submissionsAcceptanceMetric !== undefined && sortedValues !== undefined) {
       this.submissionsAcceptanceMetric.values = sortedValues;
     }
-    console.log(sortedValues);
     this.submissionsAcceptanceData = {
       labels: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.label }),
       datasets: [{

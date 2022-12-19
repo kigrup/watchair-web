@@ -13,7 +13,9 @@ export class DomainsService {
 
   private serverDomains: Domain[] = [];
   public getDomain(id: string): Domain | undefined {
-    return this.serverDomains.find((domain: Domain) => { return domain.id === id});
+    const result = this.serverDomains.find((domain: Domain) => { return domain.id === id});
+    console.log(`DomainsService::getDomain: Trying to get domain with id ${id}. Found? ${result !== undefined}`);
+    return result
   }
 
   private _domainsFetchedSubject: Subject<Domain[]> = new Subject<Domain[]>();
@@ -25,11 +27,17 @@ export class DomainsService {
     private authService: AuthService,
     private http: HttpClient
   ) {
+    console.log('DomainsService::constructor: Constructing domain Service...');
     authService.loginSubject.subscribe((loggedIn) => {
+      console.log(`DomainsService::constructor: Received auth service login event: loggedIn=${loggedIn}`)
       if (loggedIn) {
         this.fetchDomains();
       }
     });
+    if (this.serverDomains.length === 0) {
+      this.fetchDomains();
+    }
+    console.log('DomainsService::constructor: Constructed domain Service!');
   }
 
   private async fetchDomains(): Promise<void> {
@@ -64,7 +72,7 @@ export class DomainsService {
     try {
       const res = await firstValueFrom(req);
     } catch (e) {
-      console.log(`DomainService::deleteDomain: Error caught while deleting domain. ${(e instanceof HttpErrorResponse ? `Response status ${e.status}` : '')}`)
+      console.log(`DomainsService::deleteDomain: Error caught while deleting domain. ${(e instanceof HttpErrorResponse ? `Response status ${e.status}` : '')}`)
     }
     await this.fetchDomains();
     return true;
