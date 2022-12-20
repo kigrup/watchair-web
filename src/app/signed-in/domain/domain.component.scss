@@ -1,0 +1,13 @@
+:host ::ng-deep .p-tabview .p-tabview-panels {
+  background: none;
+}
+
+:host ::ng-deep .p-tabview-nav {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+:host ::ng-deep .p-disabled a {
+  pointer-events: auto;
+}
