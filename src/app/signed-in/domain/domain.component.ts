@@ -149,6 +149,14 @@ export class DomainComponent {
       })
     })
 
-    this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
+    // Review scores metric
+    this.individualSubmissionsAcceptanceMetric?.values.forEach((metric) => {
+      this.tableMetrics.find((v, i) => {
+        return v.pcMember === metric.label
+      }).relativeAcceptanceFactor = `${metric.value}`
+    })
+
+    //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
+    this.tableMetrics.sort((a, b) => { return a.relativeAcceptanceFactor - b.relativeAcceptanceFactor})
   }
 }

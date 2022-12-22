@@ -111,12 +111,14 @@
               <tr>
                 <th>PC Member</th>
                 <th>Reviews done</th>
+                <th>Relative acceptance factor</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-metric>
               <tr>
                 <td>{{metric.pcMember}}</td>
                 <td>{{metric.reviewsDone}}</td>
+                <td>{{metric.relativeAcceptanceFactor > 0 ? '+' + metric.relativeAcceptanceFactor : metric.relativeAcceptanceFactor}}</td>
               </tr>
             </ng-template>
           </p-table>
