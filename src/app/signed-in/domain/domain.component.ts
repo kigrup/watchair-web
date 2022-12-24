@@ -24,6 +24,7 @@ export class DomainComponent {
   protected submissionsAcceptanceMetric: Metric | undefined;
   protected individualSubmissionsAcceptanceMetric: Metric | undefined;
   protected submissionsAcceptanceData: any;
+  protected submissionsAcceptanceScoreAverage: number | undefined;
 
   protected tableMetrics: any[] = []
 
@@ -151,9 +152,13 @@ export class DomainComponent {
 
     // Review scores metric
     this.individualSubmissionsAcceptanceMetric?.values.forEach((metric) => {
-      this.tableMetrics.find((v, i) => {
-        return v.pcMember === metric.label
-      }).relativeAcceptanceFactor = `${metric.value}`
+      if (metric.label === 'average') {
+        this.submissionsAcceptanceScoreAverage = metric.value
+      } else {
+        this.tableMetrics.find((v, i) => {
+          return v.pcMember === metric.label
+        }).relativeAcceptanceFactor = `${metric.value.toFixed(2)}`
+      }
     })
 
     //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
