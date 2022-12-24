@@ -29,6 +29,7 @@ import {FileUploadModule} from "primeng/fileupload";
 import {TableModule} from "primeng/table";
 import {NgCircleProgressModule} from "ng-circle-progress";
 import {ChartModule} from "primeng/chart";
+import {TabViewModule} from "primeng/tabview";
 
 @NgModule({
   declarations: [
@@ -43,40 +44,41 @@ import {ChartModule} from "primeng/chart";
     DocsGettingStartedComponent,
     DocsUploadingDataComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MatSidenavModule,
-    PanelMenuModule,
-    MenuModule,
-    ButtonModule,
-    RippleModule,
-    CheckboxModule,
-    InputTextModule,
-    DividerModule,
-    FormsModule,
-    DropdownModule,
-    HttpClientModule,
-    SkeletonModule,
-    FileUploadModule,
-    TableModule,
-    NgCircleProgressModule.forRoot({
-      renderOnClick: false,
-      radius: 110,
-      outerStrokeColor: '#2196F3',
-      outerStrokeGradientStopColor: '#6ab8f7',
-      outerStrokeWidth: 20,
-      outerStrokeGradient: true,
-      innerStrokeColor: '#E7E8EA',
-      innerStrokeWidth: 28,
-      space: -24,
-      titleFontSize: '35',
-      unitsFontSize: '25',
-      subtitleFontSize: '18'
-    }),
-    ChartModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        MatSidenavModule,
+        PanelMenuModule,
+        MenuModule,
+        ButtonModule,
+        RippleModule,
+        CheckboxModule,
+        InputTextModule,
+        DividerModule,
+        FormsModule,
+        DropdownModule,
+        HttpClientModule,
+        SkeletonModule,
+        FileUploadModule,
+        TableModule,
+        NgCircleProgressModule.forRoot({
+            renderOnClick: false,
+            radius: 110,
+            outerStrokeColor: '#2196F3',
+            outerStrokeGradientStopColor: '#6ab8f7',
+            outerStrokeWidth: 20,
+            outerStrokeGradient: true,
+            innerStrokeColor: '#E7E8EA',
+            innerStrokeWidth: 28,
+            space: -24,
+            titleFontSize: '35',
+            unitsFontSize: '25',
+            subtitleFontSize: '18'
+        }),
+        ChartModule,
+        TabViewModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
