@@ -109,9 +109,14 @@
           <p-table [value]="tableMetrics">
             <ng-template pTemplate="header">
               <tr>
-                <th>PC Member</th>
+                <th rowspan="2">PC Member</th>
                 <th>Reviews done</th>
-                <th>Relative acceptance factor</th>
+                <th *ngIf="submissionsAcceptanceScoreAverage" rowspan="1">Relative acceptance factor</th>
+                <th *ngIf="!submissionsAcceptanceScoreAverage" rowspan="2">Relative acceptance factor</th>
+              </tr>
+              <tr>
+                <th *ngIf="reviewsDoneMetric">Total {{reviewsDoneMetric.values[0].value}}/{{reviewsDoneMetric.values[0].max}}</th>
+                <th *ngIf="submissionsAcceptanceScoreAverage">Average {{submissionsAcceptanceScoreAverage}}</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-metric>
