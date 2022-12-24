@@ -153,7 +153,7 @@ export class DomainComponent {
     this.individualSubmissionsAcceptanceMetric?.values.forEach((metric) => {
       this.tableMetrics.find((v, i) => {
         return v.pcMember === metric.label
-      }).relativeAcceptanceFactor = `${metric.value}`
+      }).relativeAcceptanceFactor = `${metric.value.toFixed(2)}`
     })
 
     //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
