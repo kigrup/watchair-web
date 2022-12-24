@@ -15,6 +15,9 @@ export class MetricsService {
   public getDomainMetrics(domainId: string): Metric[] {
     return this.serverMetrics.filter((metric: Metric) => { return metric.domainId === domainId})
   }
+  public getDomainMetric(domainId: string, title: string): Metric | undefined {
+    return this.serverMetrics.find((metric: Metric) => { return metric.domainId === domainId && metric.title === title })
+  }
 
   private _metricsFetchedSubject: Subject<Metric[]> = new Subject<Metric[]>();
   public get metricsFetchedSubject(): Subject<Metric[]> {
