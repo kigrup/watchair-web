@@ -5,6 +5,14 @@
       <label for="domainName" class="block">Domain name</label>
       <input class="w-8" id="domainName" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="newDomainName" (ngModelChange)="formChange()"/>
     </li>
+    <li class="field w-full pt-2">
+      <label for="startDate" class="block">Conference start date</label>
+      <input class="w-8" id="startDate" type="date" [(ngModel)]="startDate"/>
+    </li>
+    <li class="field w-full pt-2">
+      <label for="endDate" class="block">Conference start date</label>
+      <input class="w-8" id="endDate" type="date" [(ngModel)]="endDate"/>
+    </li>
   </ul>
   <button pButton pRipple label="Create" icon="pi pi-save" class="w-full mt-6" (click)="createDomain()" [disabled]="!enoughDomainData" ></button>
 </div>

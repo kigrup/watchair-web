@@ -11,6 +11,7 @@ import { firstValueFrom, Subject } from "rxjs";
 export class AuthService {
 
   private LOGGED_USERNAME_COOKIE: string = 'logged-username';
+  private INSTANCE_URL_COOKIE: string = 'instance-url'
 
   private _isLoggedIn: boolean;
   public get isLoggedIn(): boolean {
@@ -46,6 +47,7 @@ export class AuthService {
     this._preferredAPI = API_VERSIONS[0];
     this._loggedUsername = null;
     this.checkLoginStorage();
+    this.checkSettingsStorage();
   }
 
   private checkLoginStorage() {
@@ -53,8 +55,20 @@ export class AuthService {
     if (cookieUsername) {
       console.log(`authService::checkLoginStorage: Found a logged in user: ${cookieUsername}`)
       this.login(cookieUsername)
-      console.log(`now loggeds in user is: ${this._loggedUsername}`)
     }
+  }
+
+  private checkSettingsStorage() {
+    const cookieInstanceURL = localStorage.getItem(this.INSTANCE_URL_COOKIE);
+    if (cookieInstanceURL) {
+      console.log(`authService::checkSettingsStorage: Found a saved instance url: ${cookieInstanceURL}`)
+      this._instanceURL = cookieInstanceURL;
+    }
+  }
+
+  public updateInstanceURL(value: string) {
+    this._instanceURL = value;
+    localStorage.setItem(this.INSTANCE_URL_COOKIE, value)
   }
 
   public forceLogin() {
