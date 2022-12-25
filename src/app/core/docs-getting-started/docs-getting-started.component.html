@@ -1,1 +1,48 @@
-<p>docs-getting-started works!</p>
+<div class="w-full py-4 px-4">
+  <div class="documentation surface-card shadow-4 border-round p-4">
+    <h1 class="text-6xl font-medium">Getting started</h1>
+    <p>
+      To start using WatChair you first need to connect to a server where your data can be stored and processed. <br/><br/>
+      You can either <a routerLink="." [fragment]="'self-host'">host your own instance</a>
+       or <a routerLink="." [fragment]="'connect-to-a-server'">connect to one</a>.
+    </p>
+    <h2 id="self-host" class="text-4xl font-medium">Hosting your own server</h2>
+    The server for this project is built into a Docker image. To be able to host your own you must:
+    <ul>
+      <li class="m-2">
+        Have a Docker engine installed in your system. (Docker Desktop is available for
+         <a href="https://docs.docker.com/desktop/install/windows-install/">Windows</a>,
+         <a href="https://docs.docker.com/desktop/install/linux-install/">Linux</a> and
+         <a href="https://docs.docker.com/desktop/install/mac-install/">Mac</a>)
+      </li>
+      <li class="m-2">
+        Download the latest WatChair server image from Docker Hub:
+        <ul>
+          <li>Either <a href="https://hub.docker.com/repository/docker/raulplesa/watchair-server">from the browser</a>.</li>
+          <li>
+            Or via command line (Docker installation required):<br/>
+            <div class="codeblock cli">docker pull raulplesa/watchair-server:latest</div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    Once you have the image you can run it with the following command: <br/>
+    <div class="codeblock cli">
+      docker run -d -p 42525:42525 --name watchair-server raulplesa/watchair-server:latest
+    </div>
+    <p>
+      This runs the latest version of the image in your system named "raulplesa/watchair-server",
+      exposing container port 42525 to the local machine port 42525. The running container name
+      is set to "watchair-server" (needed if you want to refer to it via CLI). The <span>-d</span>
+      option means <i>detached</i>, making the container run in the background.
+    </p>
+    <h2 id="connect-to-a-server" class="text-4xl font-medium">Connecting to a server</h2>
+    <p>
+      Once you have access to a running server, you can set up the application to connect to it.
+      To do this you must go to the <a href="/settings">Settings</a> section of the web application and set the field
+      <i>Instance URL</i> to the desired IP and port.
+
+      Now whenever you try to <a href="/login">login</a> you will connect to that server.
+    </p>
+  </div>
+</div>

@@ -49,13 +49,15 @@ export class DomainsService {
     this.domainsFetchedSubject.next(this.serverDomains);
   }
 
-  public async createDomain(domainName: string): Promise<boolean> {
+  public async createDomain(domainName: string, startDate: Date | undefined, endDate: Date | undefined): Promise<boolean> {
     if (domainName === undefined || domainName === '') {
       return false;
     }
     console.log(`DomainsService::createDomain: Sending create request with name ${domainName}`);
     const req = this.http.post<any>(`http://${this.authService.instanceURL}/api/${this.authService.preferredAPI.version}/domains`, {
-      name: domainName
+      name: domainName,
+      startDate: startDate !== undefined ? startDate : undefined,
+      endDate: endDate !== undefined ? endDate : undefined
     });
     const res: Domain = await firstValueFrom(req);
     await this.fetchDomains();
