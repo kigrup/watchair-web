@@ -1,1 +1,52 @@
-<p>docs-uploading-data works!</p>
+<div class="w-full py-4 px-4">
+  <div class="documentation surface-card shadow-4 border-round p-4">
+    <h1 class="text-6xl font-medium">Uploading data</h1>
+    <p>This page will explain how to upload your files to the server to process them.</p>
+    <h2 class="text-4xl font-medium">Domains</h2>
+    <p>
+      A <i>domain</i> represents a particular set of data you want to analyze. It can be the whole dataset of
+      an academic conference or just a specific subset. Say for example you want to analyze national and foreign
+      Commitee members separately, be it for commodity or privacy reasons. In this case you would create two domains.
+      Per-user configurable permissions and sharing rules are not yet implemented, but it would serve the purpose
+      of separating user access to data too.
+    </p>
+    <p>
+      Once logged in, you can create a new domain via the <a href="/domains/new">Create new</a> tab under
+      <b>Domains</b> in the left drawer menu. Here you will be asked for some mandatory and some optional
+      data. After pressing the "Create" button, the recently created domain will be available under the
+      same Domains menu in the left.
+    </p>
+    <p>
+      When going to any domain page, you have access to two tabs: <b>Details</b> and <b>Metrics</b>.
+    </p>
+    <h3 class="text-xl font-medium">Domain Details</h3>
+    <p>
+      Here you will find mainly three important components. First off, the domain record <b>fields</b>.
+      This includes its unique Id, the date of creation and last modification, etc. You can also see a
+      red button with which you can delete the domain and all the data related to it. This action is
+      irreversible for now, but the database ORM allows its data to be soft-deleted.
+    </p>
+    <p>
+      You can also find a section titled "Domain Data". From here we can select any file from out machine by
+      first pressing "Choose" and using the pop-up wizard. Then we can send the file to the server via
+      the "Upload" button. Once a file is sent to the server, a processing job is automatically ran.
+    </p>
+    <p>
+      The last section displays exactly that, a table of all the server jobs related to this domain. A job can be either
+      a <i>file processing job</i> or a <i>metric calculation job</i>. File processing is the first necessary
+      phase in which the .XLS or .XLSX file is read, after which records are created in the database. These
+      jobs have the file name in the "Subject" column of the job. Note that you won't see the original name, but a
+      unique one created by the server. The remaining jobs will be metric calculation ones. These are what their
+      name suggest: jobs that calculate a specific metric for the uploaded data.
+    </p>
+    <p>
+      Once the metric jobs have completed running successfully (indicated by the "Status" column), you can
+      access the metrics tab to see the results.
+    </p>
+    <h3 class="text-xl font-medium">Domain Metrics</h3>
+    <p>
+      This section is aimed to be self-explanatory. It displays all the metrics calculated from the processed data
+      in different ways: tables, pie charts, bar charts...
+    </p>
+  </div>
+</div>
