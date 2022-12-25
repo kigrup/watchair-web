@@ -9,18 +9,18 @@
       <label for="username" class="block text-900 font-medium mb-2">Username</label>
       <input id="username" type="text" pInputText class="w-full mb-3" [(ngModel)]="username">
 
-      <label for="password" class="block text-900 font-medium mb-2">Password</label>
-      <input id="password" type="password" pInputText class="w-full mb-3" [(ngModel)]="password">
+      <label for="password" class="block text-400 font-medium mb-2">Password</label>
+      <input [disabled]="true" id="password" type="password" pInputText class="w-full mb-3" [(ngModel)]="password">
 
       <div class="flex align-items-center justify-content-between mb-6">
         <div class="flex align-items-center">
           <p-checkbox id="rememberme" [binary]="true" [disabled]="true" styleClass="mr-2"></p-checkbox>
-          <label for="rememberme" class="text-900">Remember me</label>
+          <label for="rememberme" class="text-400">Remember me</label>
         </div>
-        <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
+        <a class="font-medium no-underline ml-2 text-blue-200 text-right cursor-pointer">Forgot password?</a>
       </div>
 
-      <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full" (click)="login()" [disabled]="loadingLogin"></button>
+      <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full" (click)="login()" [disabled]="loadingLogin || !username"></button>
     </div>
   </div>
 </div>

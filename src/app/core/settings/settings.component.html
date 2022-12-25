@@ -8,7 +8,7 @@
           <b>Server</b>
         </div>
       </p-divider>
-      <p class="mt-5">Some settings are only available when being connected to a server and others while not</p>
+      <p class="mt-5">Some settings are not available yet.</p>
       <ul class="list-none">
         <li class="field w-full pt-3">
           <label for="instanceurl" class="block">Instance URL</label>
@@ -17,7 +17,7 @@
         </li>
         <li class="field w-full pt-3">
           <label for="apiversion" class="block">API Version</label>
-          <p-dropdown id="apiversion" [disabled]="this.authService.isLoggedIn"  [options]="apiVersions" [(ngModel)]="apiVersion" placeholder="" optionLabel="version" [showClear]="false"></p-dropdown>
+          <p-dropdown id="apiversion" [disabled]="this.authService.isLoggedIn || true"  [options]="apiVersions" [(ngModel)]="apiVersion" placeholder="" optionLabel="version" [showClear]="false"></p-dropdown>
           <small id="apiversion-help" class="block">Preferred API version to use.</small>
         </li>
         <li class="mt-6">

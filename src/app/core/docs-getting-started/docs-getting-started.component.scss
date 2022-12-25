@@ -1,0 +1,22 @@
+.documentation {
+  max-width: 55rem;
+}
+
+.codeblock {
+  display: inline-block;
+  background-color: var(--surface-200);
+  border-radius: 4px;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  padding-right: 1rem;
+  font-family: monospace, monospace;
+}
+
+.codeblock::before {
+  display: inline-block;
+  margin-right: 0.7rem;
+}
+
+.cli::before {
+  content: '> ';
+}
