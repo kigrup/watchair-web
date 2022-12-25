@@ -12,7 +12,7 @@
       <ul class="list-none">
         <li class="field w-full pt-3">
           <label for="instanceurl" class="block">Instance URL</label>
-          <input id="instanceurl" [disabled]="this.authService.isLoggedIn" class="w-8" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="serverInstanceUrl" />
+          <input id="instanceurl" [disabled]="this.authService.isLoggedIn" class="w-8" type="text" aria-describedby="instanceurl-help" pInputText [(ngModel)]="serverInstanceUrl" (ngModelChange)="this.authService.updateInstanceURL($event)"/>
           <small id="instanceurl-help" class="block">Server base URL with optional port.</small>
         </li>
         <li class="field w-full pt-3">
