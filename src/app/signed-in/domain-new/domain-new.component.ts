@@ -12,6 +12,9 @@ export class DomainNewComponent implements OnInit {
   protected enoughDomainData: boolean = false;
   protected newDomainName: string = '';
 
+  protected startDate: Date | undefined;
+  protected endDate: Date | undefined;
+
   constructor(
     private authService: AuthService,
     private domainService: DomainsService
@@ -26,6 +29,6 @@ export class DomainNewComponent implements OnInit {
   }
 
   protected createDomain() {
-    this.domainService.createDomain(this.newDomainName);
+    this.domainService.createDomain(this.newDomainName, this.startDate, this.endDate);
   }
 }
