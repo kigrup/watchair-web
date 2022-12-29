@@ -23,7 +23,7 @@ export class DomainComponent {
   protected individualReviewsDoneMetric: Metric | undefined;
   protected submissionsAcceptanceMetric: Metric | undefined;
   protected individualSubmissionsAcceptanceMetric: Metric | undefined;
-  protected submissionsAcceptanceData: any;
+  protected submissionsAcceptanceData: {name: string, value: number}[] = [];
   protected submissionsAcceptanceScoreAverage: number | undefined;
 
   protected tableMetrics: any[] = []
@@ -132,13 +132,14 @@ export class DomainComponent {
     if (this.submissionsAcceptanceMetric !== undefined && sortedValues !== undefined) {
       this.submissionsAcceptanceMetric.values = sortedValues;
     }
-    this.submissionsAcceptanceData = {
-      labels: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.label }),
-      datasets: [{
-        data: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.value }),
-        backgroundColor: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.color })
-      }]
-    };
+    if (this.submissionsAcceptanceMetric !== undefined) {
+    this.submissionsAcceptanceData = this.submissionsAcceptanceMetric.values.map((metricValue: MetricValue) => {
+      return {
+        name: metricValue.label,
+        value: metricValue.value
+      }
+    })
+    }
 
     // Reviews done metric
     this.tableMetrics = []

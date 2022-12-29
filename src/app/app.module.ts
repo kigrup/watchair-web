@@ -30,6 +30,7 @@ import {TableModule} from "primeng/table";
 import {NgCircleProgressModule} from "ng-circle-progress";
 import {ChartModule} from "primeng/chart";
 import {TabViewModule} from "primeng/tabview";
+import {PieChartModule} from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import {TabViewModule} from "primeng/tabview";
             subtitleFontSize: '18'
         }),
         ChartModule,
-        TabViewModule
+        TabViewModule,
+        PieChartModule
     ],
   providers: [],
   bootstrap: [AppComponent]
