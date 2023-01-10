@@ -112,8 +112,7 @@
             [scheme]="'air'"
             [animations]="true">
           </ngx-charts-advanced-pie-chart>
-          <!--<p-chart type="pie" [data]="submissionsAcceptanceData" [width]="'280'" [style]="{'margin': 'auto'}" [options]="primeNgChartOptions"></p-chart>
-          --><div class="mt-2">{{submissionsAcceptanceMetric.description}}</div>
+          <div class="mt-2">{{submissionsAcceptanceMetric.description}}</div>
         </div>
       </div>
       <div *ngIf="tableMetrics.length > 0"
@@ -124,19 +123,21 @@
               <tr>
                 <th rowspan="2">PC Member</th>
                 <th>Reviews done</th>
-                <th *ngIf="submissionsAcceptanceScoreAverage" rowspan="1">Relative acceptance factor</th>
-                <th *ngIf="!submissionsAcceptanceScoreAverage" rowspan="2">Relative acceptance factor</th>
+                <th *ngIf="submissionsAcceptanceScoreAverage" rowspan="1">Deviation from the global review average</th>
+                <th *ngIf="!submissionsAcceptanceScoreAverage" rowspan="2">Deviation from the global review average</th>
+                <th rowspan="2">Average deviation on reviewed papers</th>
               </tr>
               <tr>
                 <th *ngIf="reviewsDoneMetric">Total {{reviewsDoneMetric.values[0].value}}/{{reviewsDoneMetric.values[0].max}}</th>
-                <th *ngIf="submissionsAcceptanceScoreAverage">Average {{submissionsAcceptanceScoreAverage}}</th>
+                <th *ngIf="submissionsAcceptanceScoreAverage">Global average {{submissionsAcceptanceScoreAverage}}</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-metric>
               <tr>
                 <td>{{metric.pcMember}}</td>
-                <td>{{metric.reviewsDone}}</td>
+                <td [ngStyle]="{'background-color': this.getRGB(metric.reviewsDone, 'assignments done')}">{{metric.reviewsDone}}</td>
                 <td>{{metric.relativeAcceptanceFactor > 0 ? '+' + metric.relativeAcceptanceFactor : metric.relativeAcceptanceFactor}}</td>
+                <td [ngStyle]="{'background-color': this.getRGB(metric.localRelativeAcceptanceFactor, 'local acceptance')}">{{metric.localRelativeAcceptanceFactor > 0 ? '+' + metric.localRelativeAcceptanceFactor : metric.localRelativeAcceptanceFactor}}</td>
               </tr>
             </ng-template>
           </p-table>

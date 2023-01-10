@@ -23,6 +23,9 @@ export class DomainComponent {
   protected individualReviewsDoneMetric: Metric | undefined;
   protected submissionsAcceptanceMetric: Metric | undefined;
   protected individualSubmissionsAcceptanceMetric: Metric | undefined;
+  protected individualLocalSubmissionsAcceptanceMetric: Metric | undefined;
+  protected minAverageScoreDeviation: number = Number.MAX_SAFE_INTEGER;
+  protected maxAverageScoreDeviation: number = Number.MIN_SAFE_INTEGER;
   protected submissionsAcceptanceData: {name: string, value: number}[] = [];
   protected submissionsAcceptanceScoreAverage: number | undefined;
 
@@ -118,6 +121,7 @@ export class DomainComponent {
       this.individualReviewsDoneMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Review assignments finished')
       this.submissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Submissions evaluation scores')
       this.individualSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Submissions evaluation scores')
+      this.individualLocalSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual Local: Submissions evaluation scores')
       this.updateMetricsData();
     }
   }
@@ -162,7 +166,35 @@ export class DomainComponent {
       }
     })
 
+    this.individualLocalSubmissionsAcceptanceMetric?.values.forEach((metric) => {
+      this.maxAverageScoreDeviation = Math.max(this.maxAverageScoreDeviation, metric.value);
+      this.minAverageScoreDeviation = Math.min(this.minAverageScoreDeviation, metric.value);
+      this.tableMetrics.find((v, i) => {
+        return v.pcMember === metric.label
+      }).localRelativeAcceptanceFactor = `${metric.value.toFixed(2)}`
+    })
+
     //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
-    this.tableMetrics.sort((a, b) => { return a.relativeAcceptanceFactor - b.relativeAcceptanceFactor})
+    this.tableMetrics.sort((a, b) => { return a.localRelativeAcceptanceFactor - b.localRelativeAcceptanceFactor})
+  }
+
+  private mapRangeClamped (from: number[], to: number[], s: number): number {
+    const num = to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+    return Math.max(to[0], Math.min(to[1], num))
+  };
+
+  public getRGB(factor: string, valueType: 'assignments done' | 'global acceptance' | 'local acceptance'): string {
+    if (valueType === 'assignments done') {
+      const percent = factor.substring(factor.lastIndexOf('(')+1, factor.lastIndexOf('%)'))
+      const valueNumber = Number.parseFloat(percent);
+      const lightness = this.mapRangeClamped([0, 100], [65, 100], valueNumber);
+      return `hsl(207, 100%, ${lightness}%)`
+    } else if (valueType === 'local acceptance') {
+      const valueNumber = Number.parseFloat(factor);
+      const lightness = this.mapRangeClamped([-2, 0], [75, 100], -Math.abs(valueNumber));
+      return `hsl(207, 100%, ${lightness}%)`
+    } else {
+      return 'white';
+    }
   }
 }
