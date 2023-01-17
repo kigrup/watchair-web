@@ -138,7 +138,8 @@
               <tr>
                 <td>{{metric.pcMember}}</td>
                 <td [ngStyle]="{'background-color': this.getRGB(metric.reviewsDone, 'assignments done')}">{{metric.reviewsDone}}</td>
-                <td>0</td>
+                <td *ngIf="domain !== undefined && domain.endDate === undefined">0</td>
+                <td *ngIf="domain !== undefined && domain.endDate !== undefined">{{metric.reviewsDoneLate}}</td>
                 <td>{{metric.relativeAcceptanceFactor > 0 ? '+' + metric.relativeAcceptanceFactor : metric.relativeAcceptanceFactor}}</td>
                 <td [ngStyle]="{'background-color': this.getRGB(metric.localRelativeAcceptanceFactor, 'local acceptance')}">{{metric.localRelativeAcceptanceFactor > 0 ? '+' + metric.localRelativeAcceptanceFactor : metric.localRelativeAcceptanceFactor}}</td>
                 <td>{{metric.participationScore}}</td>

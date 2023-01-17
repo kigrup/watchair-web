@@ -22,6 +22,7 @@ export class DomainComponent {
   protected jobs: Job[] = [];
   protected reviewsDoneMetric: Metric | undefined;
   protected individualReviewsDoneMetric: Metric | undefined;
+  protected individualReviewsDoneLateMetric: Metric | undefined;
   protected submissionsAcceptanceMetric: Metric | undefined;
   protected individualSubmissionsAcceptanceMetric: Metric | undefined;
   protected individualLocalSubmissionsAcceptanceMetric: Metric | undefined;
@@ -121,6 +122,7 @@ export class DomainComponent {
       }
       this.reviewsDoneMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Review assignments finished')
       this.individualReviewsDoneMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Review assignments finished')
+      this.individualReviewsDoneLateMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Review assignments finished (late)')
       this.submissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Submissions evaluation scores')
       this.individualSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Submissions evaluation scores')
       this.individualLocalSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual Local: Submissions evaluation scores')
@@ -156,6 +158,11 @@ export class DomainComponent {
         reviewsDonePercent: Math.floor(100*metric.value/metric.max),
         reviewsDone: `${metric.value}/${metric.max} (${Math.floor(100*metric.value/metric.max)}%)`
       })
+    })
+    this.individualReviewsDoneLateMetric?.values.forEach((metric) => {
+      this.tableMetrics.find((v, i) => {
+        return v.pcMember === metric.label
+      }).reviewsDoneLate = `${metric.value}`
     })
 
     // Review scores metric
