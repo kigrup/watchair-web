@@ -8,6 +8,7 @@ import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {Metric, MetricValue} from "../../server/types/metrics";
 import {MetricsService} from "../../server/metrics/metrics.service";
+import {SortEvent} from "primeng/api";
 
 @Component({
   selector: 'app-domain',
@@ -28,6 +29,7 @@ export class DomainComponent {
   protected maxAverageScoreDeviation: number = Number.MIN_SAFE_INTEGER;
   protected submissionsAcceptanceData: {name: string, value: number}[] = [];
   protected submissionsAcceptanceScoreAverage: number | undefined;
+  protected participationScoreMetric: Metric | undefined;
 
   protected tableMetrics: any[] = []
 
@@ -122,6 +124,7 @@ export class DomainComponent {
       this.submissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Submissions evaluation scores')
       this.individualSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Submissions evaluation scores')
       this.individualLocalSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual Local: Submissions evaluation scores')
+      this.participationScoreMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Participation in the review process')
       this.updateMetricsData();
     }
   }
@@ -174,6 +177,16 @@ export class DomainComponent {
       }).localRelativeAcceptanceFactor = `${metric.value.toFixed(2)}`
     })
 
+    // Participation
+    this.participationScoreMetric?.values.forEach((metric) => {
+      const indexOfMember = this.tableMetrics.indexOf(this.tableMetrics.find((v,i) => {
+        return v.pcMember === metric.label
+      }));
+      if (indexOfMember >= 0) {
+        this.tableMetrics[indexOfMember].participationScore = metric.value
+      }
+    })
+
     //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
     this.tableMetrics.sort((a, b) => { return a.localRelativeAcceptanceFactor - b.localRelativeAcceptanceFactor})
   }
@@ -195,6 +208,35 @@ export class DomainComponent {
       return `hsl(207, 100%, ${lightness}%)`
     } else {
       return 'white';
+    }
+  }
+
+  customSort(event: SortEvent) {
+    if (event.data !== undefined) {
+      event.data.sort((data1, data2) => {
+        if (event.field !== undefined && event.order) {
+          let value1 = data1[event.field];
+          let value2 = data2[event.field];
+          let result = null;
+          if (event.field === 'reviewsDone') {
+            if (value1 == null && value2 != null)
+              result = -1;
+            else if (value1 != null && value2 == null)
+              result = 1;
+            else if (value1 == null && value2 == null)
+              result = 0;
+            else if (typeof value1 === 'string' && typeof value2 === 'string')
+              result = value1.localeCompare(value2);
+            else
+              result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+            return (event.order * result);
+          } else {
+            result = (Number(value1) < Number(value2)) ? -1 : (Number(value1) > Number(value2)) ? 1 : 0;
+            return (event.order * result);
+          }
+        }
+        return 0;
+      });
     }
   }
 }

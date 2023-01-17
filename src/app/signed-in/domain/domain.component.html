@@ -118,17 +118,19 @@
       <div *ngIf="tableMetrics.length > 0"
            class="col-12 p-2">
         <div class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
-          <p-table [value]="tableMetrics">
+          <p-table [value]="tableMetrics" (sortFunction)="customSort($event)" [customSort]="true">
             <ng-template pTemplate="header">
               <tr>
-                <th rowspan="2">PC Member</th>
-                <th>Reviews done</th>
-                <th *ngIf="submissionsAcceptanceScoreAverage" rowspan="1">Deviation from the global review average</th>
-                <th *ngIf="!submissionsAcceptanceScoreAverage" rowspan="2">Deviation from the global review average</th>
-                <th rowspan="2">Average deviation on reviewed papers</th>
+                <th pSortableColumn="pcMember" rowspan="2">PC Member<p-sortIcon field="pcMember"></p-sortIcon></th>
+                <th pSortableColumn="reviewsDone" colspan="2">Reviews done<p-sortIcon field="reviewsDone"></p-sortIcon></th>
+                <th pSortableColumn="relativeAcceptanceFactor" *ngIf="submissionsAcceptanceScoreAverage" rowspan="1">Deviation from the global average<p-sortIcon field="relativeAcceptanceFactor"></p-sortIcon></th>
+                <th pSortableColumn="relativeAcceptanceFactor" *ngIf="!submissionsAcceptanceScoreAverage" rowspan="2">Deviation from the global average<p-sortIcon field="relativeAcceptanceFactor"></p-sortIcon></th>
+                <th pSortableColumn="localRelativeAcceptanceFactor" rowspan="2">Average deviation on reviewed papers<p-sortIcon field="localRelativeAcceptanceFactor"></p-sortIcon></th>
+                <th pSortableColumn="participationScore" rowspan="2">Participation score<p-sortIcon field="participationScore"></p-sortIcon></th>
               </tr>
               <tr>
                 <th *ngIf="reviewsDoneMetric">Total {{reviewsDoneMetric.values[0].value}}/{{reviewsDoneMetric.values[0].max}}</th>
+                <th>After due date</th>
                 <th *ngIf="submissionsAcceptanceScoreAverage">Global average {{submissionsAcceptanceScoreAverage}}</th>
               </tr>
             </ng-template>
@@ -136,8 +138,10 @@
               <tr>
                 <td>{{metric.pcMember}}</td>
                 <td [ngStyle]="{'background-color': this.getRGB(metric.reviewsDone, 'assignments done')}">{{metric.reviewsDone}}</td>
+                <td>0</td>
                 <td>{{metric.relativeAcceptanceFactor > 0 ? '+' + metric.relativeAcceptanceFactor : metric.relativeAcceptanceFactor}}</td>
                 <td [ngStyle]="{'background-color': this.getRGB(metric.localRelativeAcceptanceFactor, 'local acceptance')}">{{metric.localRelativeAcceptanceFactor > 0 ? '+' + metric.localRelativeAcceptanceFactor : metric.localRelativeAcceptanceFactor}}</td>
+                <td>{{metric.participationScore}}</td>
               </tr>
             </ng-template>
           </p-table>
