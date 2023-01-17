@@ -17,6 +17,9 @@ export class DomainsService {
     console.log(`DomainsService::getDomain: Trying to get domain with id ${id}. Found? ${result !== undefined}`);
     return result
   }
+  public getDomains(): Domain[] {
+    return this.serverDomains;
+  }
 
   private _domainsFetchedSubject: Subject<Domain[]> = new Subject<Domain[]>();
   public get domainsFetchedSubject(): Subject<Domain[]> {
