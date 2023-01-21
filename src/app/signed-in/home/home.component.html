@@ -1,7 +1,21 @@
 <div class="grid w-full py-4 px-2 m-0">
   <div class="col-12 p-2">
     <div class="surface-card shadow-4 w-full lg:min-h-full p-4 border-round">
-      <div  class="text-5xl">Welcome {{username}}!</div>
+      <div class="text-5xl">Welcome {{username}}!</div>
+      <div class="text-xl pt-5">Start by <a href="/domains/new">creating a new Domain</a>
+        to send some data
+        <span *ngIf="domains.length > 0">
+          or access one of your existing ones:
+          <ul *ngFor="let domain of domains">
+            <li>
+              <a href="/domains/view/{{domain.id}}">{{domain.name}}</a>
+            </li>
+          </ul>
+        </span>
+      </div>
+      <div class="text-xl pt-5">
+        You can also <a href="/docs/uploading-data"> check out the documentation</a> to learn more about the process of uploading files.
+      </div>
     </div>
   </div>
 </div>
