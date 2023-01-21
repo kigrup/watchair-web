@@ -8,6 +8,7 @@ import {Job} from "../../server/types/jobs";
 import {JobsService} from "../../server/jobs/jobs.service";
 import {Metric, MetricValue} from "../../server/types/metrics";
 import {MetricsService} from "../../server/metrics/metrics.service";
+import {SortEvent} from "primeng/api";
 
 @Component({
   selector: 'app-domain',
@@ -21,10 +22,15 @@ export class DomainComponent {
   protected jobs: Job[] = [];
   protected reviewsDoneMetric: Metric | undefined;
   protected individualReviewsDoneMetric: Metric | undefined;
+  protected individualReviewsDoneLateMetric: Metric | undefined;
   protected submissionsAcceptanceMetric: Metric | undefined;
   protected individualSubmissionsAcceptanceMetric: Metric | undefined;
-  protected submissionsAcceptanceData: any;
+  protected individualLocalSubmissionsAcceptanceMetric: Metric | undefined;
+  protected minAverageScoreDeviation: number = Number.MAX_SAFE_INTEGER;
+  protected maxAverageScoreDeviation: number = Number.MIN_SAFE_INTEGER;
+  protected submissionsAcceptanceData: {name: string, value: number}[] = [];
   protected submissionsAcceptanceScoreAverage: number | undefined;
+  protected participationScoreMetric: Metric | undefined;
 
   protected tableMetrics: any[] = []
 
@@ -116,8 +122,11 @@ export class DomainComponent {
       }
       this.reviewsDoneMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Review assignments finished')
       this.individualReviewsDoneMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Review assignments finished')
+      this.individualReviewsDoneLateMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Review assignments finished (late)')
       this.submissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Global: Submissions evaluation scores')
       this.individualSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Submissions evaluation scores')
+      this.individualLocalSubmissionsAcceptanceMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual Local: Submissions evaluation scores')
+      this.participationScoreMetric = this.metricsService.getDomainMetric(this.domainId, 'Individual: Participation in the review process')
       this.updateMetricsData();
     }
   }
@@ -132,13 +141,14 @@ export class DomainComponent {
     if (this.submissionsAcceptanceMetric !== undefined && sortedValues !== undefined) {
       this.submissionsAcceptanceMetric.values = sortedValues;
     }
-    this.submissionsAcceptanceData = {
-      labels: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.label }),
-      datasets: [{
-        data: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.value }),
-        backgroundColor: this.submissionsAcceptanceMetric?.values.map((metricValue: MetricValue) => { return metricValue.color })
-      }]
-    };
+    if (this.submissionsAcceptanceMetric !== undefined) {
+    this.submissionsAcceptanceData = this.submissionsAcceptanceMetric.values.map((metricValue: MetricValue) => {
+      return {
+        name: metricValue.label,
+        value: metricValue.value
+      }
+    })
+    }
 
     // Reviews done metric
     this.tableMetrics = []
@@ -148,6 +158,11 @@ export class DomainComponent {
         reviewsDonePercent: Math.floor(100*metric.value/metric.max),
         reviewsDone: `${metric.value}/${metric.max} (${Math.floor(100*metric.value/metric.max)}%)`
       })
+    })
+    this.individualReviewsDoneLateMetric?.values.forEach((metric) => {
+      this.tableMetrics.find((v, i) => {
+        return v.pcMember === metric.label
+      }).reviewsDoneLate = `${metric.value}`
     })
 
     // Review scores metric
@@ -161,7 +176,74 @@ export class DomainComponent {
       }
     })
 
+    this.individualLocalSubmissionsAcceptanceMetric?.values.forEach((metric) => {
+      this.maxAverageScoreDeviation = Math.max(this.maxAverageScoreDeviation, metric.value);
+      this.minAverageScoreDeviation = Math.min(this.minAverageScoreDeviation, metric.value);
+      this.tableMetrics.find((v, i) => {
+        return v.pcMember === metric.label
+      }).localRelativeAcceptanceFactor = `${metric.value.toFixed(2)}`
+    })
+
+    // Participation
+    this.participationScoreMetric?.values.forEach((metric) => {
+      const indexOfMember = this.tableMetrics.indexOf(this.tableMetrics.find((v,i) => {
+        return v.pcMember === metric.label
+      }));
+      if (indexOfMember >= 0) {
+        this.tableMetrics[indexOfMember].participationScore = metric.value
+      }
+    })
+
     //this.tableMetrics.sort((a, b) => { return a.reviewsDonePercent - b.reviewsDonePercent})
-    this.tableMetrics.sort((a, b) => { return a.relativeAcceptanceFactor - b.relativeAcceptanceFactor})
+    this.tableMetrics.sort((a, b) => { return a.localRelativeAcceptanceFactor - b.localRelativeAcceptanceFactor})
+  }
+
+  private mapRangeClamped (from: number[], to: number[], s: number): number {
+    const num = to[0] + (s - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+    return Math.max(to[0], Math.min(to[1], num))
+  };
+
+  public getRGB(factor: string, valueType: 'assignments done' | 'global acceptance' | 'local acceptance'): string {
+    if (valueType === 'assignments done') {
+      const percent = factor.substring(factor.lastIndexOf('(')+1, factor.lastIndexOf('%)'))
+      const valueNumber = Number.parseFloat(percent);
+      const lightness = this.mapRangeClamped([0, 100], [65, 100], valueNumber);
+      return `hsl(207, 100%, ${lightness}%)`
+    } else if (valueType === 'local acceptance') {
+      const valueNumber = Number.parseFloat(factor);
+      const lightness = this.mapRangeClamped([-2, 0], [75, 100], -Math.abs(valueNumber));
+      return `hsl(207, 100%, ${lightness}%)`
+    } else {
+      return 'white';
+    }
+  }
+
+  customSort(event: SortEvent) {
+    if (event.data !== undefined) {
+      event.data.sort((data1, data2) => {
+        if (event.field !== undefined && event.order) {
+          let value1 = data1[event.field];
+          let value2 = data2[event.field];
+          let result = null;
+          if (event.field === 'reviewsDone') {
+            if (value1 == null && value2 != null)
+              result = -1;
+            else if (value1 != null && value2 == null)
+              result = 1;
+            else if (value1 == null && value2 == null)
+              result = 0;
+            else if (typeof value1 === 'string' && typeof value2 === 'string')
+              result = value1.localeCompare(value2);
+            else
+              result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+            return (event.order * result);
+          } else {
+            result = (Number(value1) < Number(value2)) ? -1 : (Number(value1) > Number(value2)) ? 1 : 0;
+            return (event.order * result);
+          }
+        }
+        return 0;
+      });
+    }
   }
 }
